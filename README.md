@@ -5,8 +5,7 @@ The Geospatial Metadata Toolkit is a versatile Python package designed to stream
 ### Metadata extraction
 GeoMetaTool simplifies the process of extracting essential metadata from various types of geospatial data. It allows you to effortlessly access key information about spatial datasets, including details such as coordinate reference systems, temporal extents, data sources, and more. With this feature, you can save time and avoid the hassle of manually retrieving metadata from your geospatial assets. Specifically, it extract geospatial metadata in ISO 19115-3 format embedding ISO 19110 as the contentInfo element.
 
-(currently under development...)
-It supports the following geospatial data
+The package is currently under development to support the following geospatial data
 * Vector: shp, kml, mif, gml, dxf, geojson
 * Raster: tif, tiff
 * Collection: gdb, gpkg
@@ -20,6 +19,7 @@ metadata_extractor.save(output_path)
 ### Metadata conversion
 Dealing with different metadata standards across geospatial projects can be cumbersome. GeoMetaTool offers a seamless solution by enabling the conversion of metadata between different standards. This is achieved through a conversion table between ISO 19115-3 and a user-defined schema. This feature promotes interoperability and consistency across diverse geospatial data sources. 
 
+The package is currently under development to support this feature
 ```sh
 import geomatatool
 metadata_extractor = geomatatool.MetadataConverter(...)
