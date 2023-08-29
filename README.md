@@ -11,8 +11,8 @@ The package is currently under development to support the following geospatial d
 * Collection: gdb, gpkg
 
 ```sh
-import geomatatool
-metadata_extractor = geomatatool.MetadataExtractor(file_path, default_values)
+import geometatool
+metadata_extractor = geometatool.MetadataExtractor(file_path, default_values)
 metadata_extractor.save(output_path)
 ```
 
@@ -21,7 +21,7 @@ Dealing with different metadata standards across geospatial projects can be cumb
 
 The package is currently under development to support this feature
 ```sh
-import geomatatool
-metadata_extractor = geomatatool.MetadataConverter(...)
+import geometatool
+metadata_extractor = geometatool.MetadataConverter(...)
 metadata_extractor.save(...)
 ```
