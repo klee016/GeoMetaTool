@@ -1,43 +1,27 @@
-## ISO19115-3Creator
+## Geospatial Metadata Toolkit (GeoMetaTool)
 
-This Python script is used to crawl a specified directory, search for files (raster, vector, LAS) with a specified file extension and automatically create ISO19115-3 compliant XML Metadata files. Due to the limited information that can be automatically extracted from the files the Metadata entries are constrained and several default values are set.
+The Geospatial Metadata Toolkit is a versatile Python package designed to streamline geospatial metadata operations. Whether you're working with GIS data, satellite imagery, or any other geospatial information, GeoMetaTool provides a convenient set of tools for two primary tasks: **metadata extraction** and **metadata conversion**.
 
-The script was written to automatically create .xml-files for the upload and use with the Geonetwork CSW-Server from an existing filestructure. The goal is the help organize unstructured geodata and to make the search and discovery of certain datasets easier.
+### Metadata extraction
+GeoMetaTool simplifies the process of extracting essential metadata from various types of geospatial data. It allows you to effortlessly access key information about spatial datasets, including details such as coordinate reference systems, temporal extents, data sources, and more. With this feature, you can save time and avoid the hassle of manually retrieving metadata from your geospatial assets. Specifically, it extract geospatial metadata in ISO 19115-3 format embedding ISO 19110 as the contentInfo element.
 
-### Getting started
+(currently under development...)
+It supports the following geospatial data
+* Vector: shp, kml, mif, gml, dxf, geojson
+* Raster: tif, tiff
+* Collection: gdb, gpkg
 
-There is no package available as for now. The best way to get started is to use [Anaconda](https://www.anaconda.com/) and create a new **Python 3** environment. Clone the repository 
-
+```sh
+import geomatatool
+metadata_extractor = geomatatool.MetadataExtractor(file_path, default_values)
+metadata_extractor.save(output_path)
 ```
-git clone https://github.com/AlexZeller/ISO19115-3Creator.git
 
-```
+### Metadata conversion
+Dealing with different metadata standards across geospatial projects can be cumbersome. GeoMetaTool offers a seamless solution by enabling the conversion of metadata between different standards. This is achieved through a conversion table between ISO 19115-3 and a user-defined schema. This feature promotes interoperability and consistency across diverse geospatial data sources. 
 
-and install the required packages inside the new environemnt. The requirements are:
-
->[halo](https://github.com/manrajgrover/halo)
-
->[sridentify](https://github.com/cmollet/sridentify)
-
->[pyproj](https://github.com/jswhit/pyproj)
-
->[OWSLib](https://github.com/geopython/OWSLib)
-
->[GDAL](https://github.com/OSGeo/gdal)
-
->[PDAL](https://github.com/PDAL/PDAL)
-
-### Explanation
-
-The `main.py` contains an example configuration.
-
-To initiate the crawler create an instance of the `metacrawler.Crawler()` class. The Arguments are:
-
-```
-rootDir (string): The path of the directory to be crawled. 
-defaultValues (list): A list of certain default values for the xml. 
-CSW_URL (string): The URL of the Geonetwork CSW publication server.
-username (string): The username to authenticate with.
-password (string): The password of the user.
-upload (Boolean): Specify wheather to upload the file to Geonetwork or not.
+```sh
+import geomatatool
+metadata_extractor = geomatatool.MetadataConverter(...)
+metadata_extractor.save(...)
 ```

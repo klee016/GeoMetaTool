@@ -37,6 +37,8 @@ mrl = 'http://standards.iso.org/iso/19115/-3/mrl/2.0'
 mrc = 'http://standards.iso.org/iso/19115/-3/mrc/2.0'
 msr = 'http://standards.iso.org/iso/19115/-3/msr/2.0'
 srv = 'http://standards.iso.org/iso/19115/-3/srv/2.0'
+fcc = 'http://standards.iso.org/iso/19110/fcc/1.0'
+gfc = 'http://standards.iso.org/iso/19110/gfc/1.1'
 #schemaLocation = 'http://standards.iso.org/iso/19115/-3/mdb/2.0 http://standards.iso.org/iso/19115/-3/mdt/2.0/mdt.xsd'
 
 ET.register_namespace('xsi',xsi)
@@ -67,6 +69,8 @@ ET.register_namespace('mrl',mrl)
 ET.register_namespace('mrc',mrc)
 ET.register_namespace('msr',msr)
 ET.register_namespace('srv',srv)
+ET.register_namespace('fcc',fcc)
+ET.register_namespace('gfc',gfc)
 
 #CodeLists
 codelist_LanguageCode = 'http://www.loc.gov/standards/iso639-2/'
@@ -77,14 +81,17 @@ codelist_CI_DateTypeCode = 'http://standards.iso.org/iso/19115/resources/Codelis
 codelist_MD_ReferenceSystemTypeCode = 'http://standards.iso.org/iso/19115/resources/Codelists/cat/codelists.xml#MD_ReferenceSystemTypeCode'
 codelist_MD_ProgressCode = 'http://standards.iso.org/iso/19115/resources/Codelist/cat/codelists.xml#MD_ProgressCode'
 codelist_MD_ClassificationCode = 'http://standards.iso.org/iso/19115/resources/Codelist/cat/codelists.xml#MD_ClassificationCode'
+codelist_MD_TopologyLevelCode = 'http://standards.iso.org/iso/19115/resources/Codelist/cat/codelists.xml#MD_TopologyLevelCode'
+codelist_MD_GeometricObjectTypeCode = 'http://standards.iso.org/iso/19115/resources/Codelist/cat/codelists.xml#MD_GeometricObjectTypeCode'
 codelist_DS_AssociationTypeCode = 'http://standards.iso.org/iso/19115/resources/Codelist/cat/codelists.xml#DS_AssociationTypeCode'
 
-class Metadata:
+class MetadataFormatter:
     '''Class to create ISO19115-3 Metadata Entries.'''
     
     def __init__(self):
         #self.root = ET.Element('{'+ mdb +'}MD_Metadata', attrib={"{" + xsi + "}schemaLocation" : schemaLocation})
         self.root = ET.Element('{'+ mdb +'}MD_Metadata')
+         
           
     def prettify(self):
         '''Return a pretty-printed XML string for the Element.'''
@@ -92,12 +99,14 @@ class Metadata:
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
     
+
     def write_to_file(self, filename, metadata):
         xml_metadata = metadata.prettify()
         output_file = open(filename +".xml" , 'w' )
         output_file.write(xml_metadata)
         output_file.close()
     
+
     def metadataIdentifier(self, UUID):
         a = ET.SubElement(self.root, '{'+ mdb +'}metadataIdentifier')
         b = ET.SubElement(a, '{'+ mcc +'}MD_Identifier')
@@ -105,6 +114,7 @@ class Metadata:
         d = ET.SubElement(c, '{'+ gco +'}CharacterString')
         d.text = UUID
         
+
     def defaultLocale(self, LanguageCode):
         a = ET.SubElement(self.root, '{'+ mdb +'}defaultLocale')
         b = ET.SubElement(a, '{'+ lan +'}PT_Locale')
@@ -113,13 +123,15 @@ class Metadata:
         
         d = ET.SubElement(b, '{'+ lan +'}characterEncoding')
         ET.SubElement(d, '{'+ lan +'}MD_CharacterSetCode', codeList=codelist_MD_CharacterSetCode, codeListValue="utf8")
-                      
+
+
     def metadataScope(self, ScopeCode):
         a = ET.SubElement(self.root, '{'+ mdb +'}metadataScope')
         b = ET.SubElement(a, '{'+ mdb +'}MD_MetadataScope')
         c = ET.SubElement(b, '{'+ mdb +'}resourceScope')
         ET.SubElement(c, '{'+ mcc +'}MD_ScopeCode', codeList=codelist_MD_ScopeCode, codeListValue=ScopeCode)
         
+
     def contact(self, RoleCode, OrganisationName):
         a = ET.SubElement(self.root, '{'+ mdb +'}contact')
         b = ET.SubElement(a, '{'+ cit +'}CI_Responsibility')
@@ -132,6 +144,7 @@ class Metadata:
         f = ET.SubElement(e, '{'+ gco +'}CharacterString')
         f.text = OrganisationName
         
+
     def dateInfo(self, DateTime, DateTypeCode):
         a = ET.SubElement(self.root, '{'+ mdb +'}dateInfo')
         b = ET.SubElement(a, '{'+ cit +'}CI_Date')
@@ -141,6 +154,7 @@ class Metadata:
         e = ET.SubElement(b, '{'+ cit +'}dateType')
         ET.SubElement(e, '{'+ cit +'}CI_DateTypeCode', codeList=codelist_CI_DateTypeCode, codeListValue=DateTypeCode)
         
+
     def referenceSystemInfo(self, EPSG_Code, ReferenceSystemTypeCode):
         a = ET.SubElement(self.root, '{'+ mdb +'}referenceSystemInfo')
         b = ET.SubElement(a, '{'+ mrs +'}MD_ReferenceSystem')
@@ -155,6 +169,7 @@ class Metadata:
         h.text = 'EPSG'      
         i = ET.SubElement(b, '{'+ mrs +'}referenceSystemType')
         ET.SubElement(i, '{'+ mrs +'}MD_ReferenceSystemTypeCode', codeList=codelist_MD_ReferenceSystemTypeCode, codeListValue=ReferenceSystemTypeCode)
+
 
     def identificationInfo(self, DatasetTitle, Abstract, ProgressCode, spatialResolution, BBOX, timePeriod, Formattitle, Keywords, ClassificationCode, useLimitation):
         a = ET.SubElement(self.root, '{'+ mdb +'}identificationInfo')
@@ -249,6 +264,7 @@ class Metadata:
 #        br = ET.SubElement(bq, '{'+ gco +'}CharacterString')
 #        br.text = AssociatedResource[1] 
 
+
     def distributionInfo(self, Description, MediumName):
         a = ET.SubElement(self.root, '{'+ mdb +'}distributionInfo')
         b = ET.SubElement(a, '{'+ mrd +'}MD_Distribution')
@@ -267,6 +283,7 @@ class Metadata:
         j = ET.SubElement(i, '{'+ gco +'}CharacterString')
         j.text = MediumName
         
+
     def acquisitionInformation(self, ScopeCode, PlatformCode, PlatformDescription, InstrumentCode, InstrumentDescription):
         a = ET.SubElement(self.root, '{'+ mdb +'}acquisitionInformation')
         b = ET.SubElement(a, '{'+ mac +'}MI_AcquisitionInformation') 
@@ -300,15 +317,79 @@ class Metadata:
         r = ET.SubElement(m, '{'+ mac +'}type')
         s = ET.SubElement(r, '{'+ gco +'}CharacterString')
         s.text = InstrumentDescription
-        
-        
-        
 
 
-        
-        
-        
-        
-        
-        
+    def spatialRepresentationInfo(self, vectorSpatialRepresentation=None, gridSpatialRepresentation=None):
+        a = ET.SubElement(self.root, '{'+ mdb +'}spatialRepresentationInfo')
+        if vectorSpatialRepresentation:
+            b = ET.SubElement(a, '{'+ msr +'}MD_VectorSpatialRepresentation')
+            c = ET.SubElement(b, '{'+ msr +'}topologyLevel')
+            ET.SubElement(c, '{'+ mcc +'}MD_TopologyLevelCode', codeList=codelist_MD_TopologyLevelCode, codeListValue=vectorSpatialRepresentation.topologyLevelCode)
+            
+            for geometricObjects in vectorSpatialRepresentation.geometricObjectsList:
+                d = ET.SubElement(b, '{'+ msr +'}geometricObjects')
+                e = ET.SubElement(d, '{'+ msr +'}MD_GeometricObjects')
+                f = ET.SubElement(e, '{'+ msr +'}geometricObjectType')
+                ET.SubElement(f, '{'+ msr +'}MD_GeometricObjectTypeCode', codeList=codelist_MD_GeometricObjectTypeCode, codeListValue="MD_GeometricObjectTypeCode_" + vectorSpatialRepresentation.objectType)
+                g = ET.SubElement(e, '{'+ msr +'}geometricObjectCount')
+                h = ET.SubElement(g, '{'+ gco +'}Integer')
+                h.text = geometricObjects.count
+
+        if gridSpatialRepresentation:
+            b = ET.SubElement(a, '{'+ msr +'}MD_GridSpatialRepresentation')
+            c = ET.SubElement(b, '{'+ msr +'}numberOfDimensions')
+            d = ET.SubElement(e, '{'+ gco +'}Integer')
+            d.text = gridSpatialRepresentation.numberOfDimensions
+            e = ET.SubElement(b, '{'+ msr +'}cellGeometry')
+            f = ET.SubElement(b, '{'+ msr +'}transformationParameterAvailability')
+
     
+    def contentInfo(self, featureCatalogueName, featureCatalogueLanguageCode, featureTypeList):
+        a = ET.SubElement(self.root, '{'+ mdb +'}contentInfo')
+        b = ET.SubElement(a, '{'+ mrc +'}MD_FeatureCatalogue')
+        c = ET.SubElement(b, '{'+ mrc +'}featureCatalogue') 
+        d = ET.SubElement(c, '{'+ gfc +'}FC_FeatureCatalogue') 
+        e = ET.SubElement(d, '{'+ cat +'}name')
+        f = ET.SubElement(e, '{'+ gco +'}CharacterString')
+        f.text = featureCatalogueName
+
+        g = ET.SubElement(c, '{'+ cat +'}language')
+        ET.SubElement(g, '{'+ lan +'}LanguageCode', codeList=codelist_LanguageCode, codeListValue=featureCatalogueLanguageCode)
+
+        for featureType in featureTypeList:
+            f = ET.SubElement(d, '{'+ gfc +'}featureType')
+            g = ET.SubElement(f, '{'+ gfc +'}FC_FeatureType')
+            h = ET.SubElement(g, '{'+ gfc +'}typeName')
+            h.text = featureType.typeName
+
+            i = ET.SubElement(g, '{'+ gfc +'}definition')
+            j = ET.SubElement(i, '{'+ gco +'}CharacterString')
+            j.text = featureType.definition
+
+            k = ET.SubElement(g, '{'+ gfc +'}isAbstract')
+            l = ET.SubElement(k, '{'+ gco +'}Boolean')
+            l.text = 'false'
+
+            for carrierOfCharacteristics in featureType.carrierOfCharacteristicsList:
+                m = ET.SubElement(g, '{'+ gfc +'}carrierOfCharacteristics')
+                n = ET.SubElement(m, '{'+ gfc +'}FC_FeatureAttribute')
+                o = ET.SubElement(n, '{'+ gfc +'}memberName')
+                o.text = carrierOfCharacteristics.memberName
+
+                o = ET.SubElement(n, '{'+ gfc +'}cardinality')
+                p = ET.SubElement(o, '{'+ gco +'}CharacterString')
+                p.text = '1'
+
+                q = ET.SubElement(n, '{'+ gfc +'}valueType')
+                r = ET.SubElement(q, '{'+ gco +'}TypeName')
+                s = ET.SubElement(r, '{'+ gco +'}aName')
+                t = ET.SubElement(s, '{'+ gco +'}CharacterString')
+                t.text = carrierOfCharacteristics.valueType
+
+                for listedValue in carrierOfCharacteristics.listedValueList:
+                    u = ET.SubElement(n, '{'+ gfc +'}listedValue')
+                    v = ET.SubElement(u, '{'+ gfc +'}FC_ListedValue')
+                    w = ET.SubElement(v, '{'+ gfc +'}label')
+                    x = ET.SubElement(w, '{'+ gco +'}CharacterString')
+                    x.text = listedValue
+

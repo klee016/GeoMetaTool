@@ -11,7 +11,7 @@ def checkXML(xml):
         xml: The path of the xml file to be validated.
     """
                                                                           
-    xsd = r'.\ISO19115Creator\standards.iso.org\iso\19115\-3\mdt\2.0\mdt.xsd'                                                        
+    xsd = r'.\GeoMetaTool\standards.iso.org\iso\19115\-3\mdt\2.0\mdt.xsd'                                                        
                                                                                     
     #Open xsd file                                                                                                                                         
     with open(xsd) as f:                                                

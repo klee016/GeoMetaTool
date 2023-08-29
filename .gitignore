@@ -56,3 +56,7 @@ docs/_build/
 
 # PyBuilder
 target/
+/test
+/old_files
+/environment setup.txt
+/data
