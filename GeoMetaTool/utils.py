@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 #     return str(EPSG)
 
 
-def BBOXtoWGS84(BBOX, inputProjectionEPSG):
+def BBOX_to_WGS84(BBOX, inputProjectionEPSG):
     """ 
     Function to transform Bounding Box coordinates to WGS84 for lat, long 
     representation in ISO19115-3 xml.
@@ -97,7 +97,7 @@ def search_date(string):
         
     
 
-def search_catch_words(string):
+def search_catchwords(string):
     """ 
     Splits String (at '_', '-' and '.' and searches for non-digit strings that
     are longer than 2 characters.
@@ -227,3 +227,7 @@ ExtensionFormatTable = pd.DataFrame(ExtensionFormatData, columns=['type','extens
 def lookup_extension_format(extension):
     format_info = ExtensionFormatTable[ExtensionFormatTable['extension'] == extension]['format'].values
     return format_info[0] if len(format_info) > 0 else None
+
+def lookup_extension_type(extension):
+    type_info = ExtensionFormatTable[ExtensionFormatTable['extension'] == extension]['type'].values
+    return type_info[0] if len(type_info) > 0 else None

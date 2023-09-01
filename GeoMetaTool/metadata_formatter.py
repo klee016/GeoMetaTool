@@ -27,10 +27,11 @@ mpc = 'http://standards.iso.org/iso/19115/-3/mpc/1.0'
 mrd = 'http://standards.iso.org/iso/19115/-3/mrd/1.0'
 mri = 'http://standards.iso.org/iso/19115/-3/mri/1.0'
 mrs = 'http://standards.iso.org/iso/19115/-3/mrs/1.0'
+# cit = 'http://standards.iso.org/iso/19115/-3/cit/1.0'
 cit = 'http://standards.iso.org/iso/19115/-3/cit/2.0'
 mac = 'http://standards.iso.org/iso/19115/-3/mac/2.0'
-#mdb = 'http://standards.iso.org/iso/19115/-3/mdb/2.0'
-mdb = 'http://standards.iso.org/iso/19115/-3/mdb/1.0'
+# mdb = 'http://standards.iso.org/iso/19115/-3/mdb/1.0'
+mdb = 'http://standards.iso.org/iso/19115/-3/mdb/2.0'
 mds = 'http://standards.iso.org/iso/19115/-3/mds/2.0'
 mdt = 'http://standards.iso.org/iso/19115/-3/mdt/2.0'
 mrl = 'http://standards.iso.org/iso/19115/-3/mrl/2.0'
@@ -100,9 +101,9 @@ class MetadataFormatter:
         return reparsed.toprettyxml(indent="  ")
     
 
-    def write_to_file(self, filename, metadata):
-        xml_metadata = metadata.prettify()
-        output_file = open(filename +".xml" , 'w' )
+    def write_to_file(self, file_path):
+        xml_metadata = self.prettify()
+        output_file = open(file_path, 'w' )
         output_file.write(xml_metadata)
         output_file.close()
     
@@ -324,22 +325,22 @@ class MetadataFormatter:
         if vectorSpatialRepresentation:
             b = ET.SubElement(a, '{'+ msr +'}MD_VectorSpatialRepresentation')
             c = ET.SubElement(b, '{'+ msr +'}topologyLevel')
-            ET.SubElement(c, '{'+ mcc +'}MD_TopologyLevelCode', codeList=codelist_MD_TopologyLevelCode, codeListValue=vectorSpatialRepresentation.topologyLevelCode)
+            ET.SubElement(c, '{'+ mcc +'}MD_TopologyLevelCode', codeList=codelist_MD_TopologyLevelCode, codeListValue=vectorSpatialRepresentation['topologyLevelCode'])
             
-            for geometricObjects in vectorSpatialRepresentation.geometricObjectsList:
+            for geometricObjects in vectorSpatialRepresentation['geometricObjectsList']:
                 d = ET.SubElement(b, '{'+ msr +'}geometricObjects')
                 e = ET.SubElement(d, '{'+ msr +'}MD_GeometricObjects')
                 f = ET.SubElement(e, '{'+ msr +'}geometricObjectType')
-                ET.SubElement(f, '{'+ msr +'}MD_GeometricObjectTypeCode', codeList=codelist_MD_GeometricObjectTypeCode, codeListValue="MD_GeometricObjectTypeCode_" + vectorSpatialRepresentation.objectType)
+                ET.SubElement(f, '{'+ msr +'}MD_GeometricObjectTypeCode', codeList=codelist_MD_GeometricObjectTypeCode, codeListValue="MD_GeometricObjectTypeCode_" + geometricObjects['objectType'])
                 g = ET.SubElement(e, '{'+ msr +'}geometricObjectCount')
                 h = ET.SubElement(g, '{'+ gco +'}Integer')
-                h.text = geometricObjects.count
+                h.text = str(geometricObjects['count'])
 
         if gridSpatialRepresentation:
             b = ET.SubElement(a, '{'+ msr +'}MD_GridSpatialRepresentation')
             c = ET.SubElement(b, '{'+ msr +'}numberOfDimensions')
             d = ET.SubElement(e, '{'+ gco +'}Integer')
-            d.text = gridSpatialRepresentation.numberOfDimensions
+            d.text = gridSpatialRepresentation['numberOfDimensions']
             e = ET.SubElement(b, '{'+ msr +'}cellGeometry')
             f = ET.SubElement(b, '{'+ msr +'}transformationParameterAvailability')
 
@@ -360,21 +361,21 @@ class MetadataFormatter:
             f = ET.SubElement(d, '{'+ gfc +'}featureType')
             g = ET.SubElement(f, '{'+ gfc +'}FC_FeatureType')
             h = ET.SubElement(g, '{'+ gfc +'}typeName')
-            h.text = featureType.typeName
+            h.text = featureType['typeName']
 
             i = ET.SubElement(g, '{'+ gfc +'}definition')
             j = ET.SubElement(i, '{'+ gco +'}CharacterString')
-            j.text = featureType.definition
+            j.text = featureType['definition']
 
             k = ET.SubElement(g, '{'+ gfc +'}isAbstract')
             l = ET.SubElement(k, '{'+ gco +'}Boolean')
             l.text = 'false'
 
-            for carrierOfCharacteristics in featureType.carrierOfCharacteristicsList:
+            for carrierOfCharacteristics in featureType['carrierOfCharacteristicsList']:
                 m = ET.SubElement(g, '{'+ gfc +'}carrierOfCharacteristics')
                 n = ET.SubElement(m, '{'+ gfc +'}FC_FeatureAttribute')
                 o = ET.SubElement(n, '{'+ gfc +'}memberName')
-                o.text = carrierOfCharacteristics.memberName
+                o.text = carrierOfCharacteristics['memberName']
 
                 o = ET.SubElement(n, '{'+ gfc +'}cardinality')
                 p = ET.SubElement(o, '{'+ gco +'}CharacterString')
@@ -384,12 +385,12 @@ class MetadataFormatter:
                 r = ET.SubElement(q, '{'+ gco +'}TypeName')
                 s = ET.SubElement(r, '{'+ gco +'}aName')
                 t = ET.SubElement(s, '{'+ gco +'}CharacterString')
-                t.text = carrierOfCharacteristics.valueType
+                t.text = carrierOfCharacteristics['valueType']
 
-                for listedValue in carrierOfCharacteristics.listedValueList:
+                for listedValue in carrierOfCharacteristics['listedValueList']:
                     u = ET.SubElement(n, '{'+ gfc +'}listedValue')
                     v = ET.SubElement(u, '{'+ gfc +'}FC_ListedValue')
                     w = ET.SubElement(v, '{'+ gfc +'}label')
                     x = ET.SubElement(w, '{'+ gco +'}CharacterString')
-                    x.text = listedValue
+                    x.text = str(listedValue)
 
