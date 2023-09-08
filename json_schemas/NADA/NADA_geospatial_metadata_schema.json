@@ -212,10 +212,10 @@
                                                     "type": "string"
                                                 },
                                                 "dimensionSize": {
-                                                    "type": "integer"
+                                                    "type": "number"
                                                 },
                                                 "resolution": {
-                                                    "type": "integer"
+                                                    "type": "number"
                                                 }
                                             }
                                         }
@@ -811,16 +811,16 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "westBoundLongitude": {
-                                                            "type": "integer"
+                                                            "type": "number"
                                                         },
                                                         "eastBoundLongitude": {
-                                                            "type": "integer"
+                                                            "type": "number"
                                                         },
                                                         "southBoundLatitude": {
-                                                            "type": "integer"
+                                                            "type": "number"
                                                         },
                                                         "northBoundLatitude": {
-                                                            "type": "integer"
+                                                            "type": "number"
                                                         }
                                                     }
                                                 },
@@ -847,10 +847,10 @@
                                             "type": "object",
                                             "properties": {
                                                 "minimumValue": {
-                                                    "type": "integer"
+                                                    "type": "number"
                                                 },
                                                 "maximumValue": {
-                                                    "type": "integer"
+                                                    "type": "number"
                                                 },
                                                 "verticalCRS": {
                                                     "type": "null"
@@ -870,7 +870,7 @@
                                         "type": "string"
                                     },
                                     "value": {
-                                        "type": "integer"
+                                        "type": "number"
                                     }
                                 }
                             },
@@ -2752,7 +2752,7 @@
                                     "type": "string"
                                 },
                                 "nb_topics": {
-                                    "type": "integer"
+                                    "type": "number"
                                 },
                                 "description": {
                                     "type": "string"
@@ -2789,7 +2789,7 @@
                                                 "type": "string"
                                             },
                                             "word_weight": {
-                                                "type": "integer"
+                                                "type": "number"
                                             }
                                         }
                                     }
